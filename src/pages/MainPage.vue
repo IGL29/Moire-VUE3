@@ -27,7 +27,10 @@
 
         <Teleport v-if="isMounted" to=".notify-teleport-target">
           <router-link :to="{ name: 'cart' }" title="Перейти в корзину">
-            <NotifyMessage :isVisible="successfulRequestNotify" text="Товар добавлен в корзину" />
+            <NotifyMessage
+              :isVisible="successfulRequestNotify"
+              text="Товар добавлен в корзину"
+            />
           </router-link>
 
           <NotifyMessage
@@ -43,19 +46,19 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
-import NotifyMessage from "@/components/NotifyMessage.vue";
-import InputNumberItems from "@/components/InputNumberItems.vue";
-import FilterForm from "@/components/FilterForm.vue";
-import ProductsPagination from "@/components/ProductsPagination.vue";
-import ProductsList from "@/components/ProductsList.vue";
-import useDeclination from "@/composables/useDeclination";
-import useLoadProducts from "@/composables/useLoadProducts";
-import useMounted from "@/composables/useMounted";
+import { computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import NotifyMessage from '@/components/NotifyMessage.vue';
+import InputNumberItems from '@/components/InputNumberItems.vue';
+import FilterForm from '@/components/FilterForm.vue';
+import ProductsPagination from '@/components/ProductsPagination.vue';
+import ProductsList from '@/components/ProductsList.vue';
+import useDeclination from '@/composables/useDeclination';
+import useLoadProducts from '@/composables/useLoadProducts';
+import useMounted from '@/composables/useMounted';
 
 export default {
-  name: "MainPage",
+  name: 'MainPage',
 };
 </script>
 
@@ -65,16 +68,20 @@ const $store = useStore();
 const { isLoading, isError, fetchProducts } = useLoadProducts();
 fetchProducts();
 
-const products = computed(() => $store.getters["products/products"]);
-const numberProducts = computed(() => $store.getters["page/numberProducts"]);
-const successfulRequestNotify = computed(() => $store.getters["notify/successfulRequestNotify"]);
-const errorRequestNotify = computed(() => $store.getters["notify/errorRequestNotify"]);
-
-const countProducts = computed(() =>
-  useDeclination(numberProducts, ["товар", "товара", "товаров"]),
+const products = computed(() => $store.getters['products/products']);
+const numberProducts = computed(() => $store.getters['page/numberProducts']);
+const successfulRequestNotify = computed(
+  () => $store.getters['notify/successfulRequestNotify']
+);
+const errorRequestNotify = computed(
+  () => $store.getters['notify/errorRequestNotify']
 );
 
-$store.commit("notify/clearTimerNotify");
+const countProducts = computed(() =>
+  useDeclination(numberProducts, ['товар', 'товара', 'товаров'])
+);
+
+$store.commit('notify/clearTimerNotify');
 
 const { isMounted } = useMounted();
 </script>

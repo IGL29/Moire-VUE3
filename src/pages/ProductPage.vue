@@ -41,7 +41,12 @@
           {{ title }}
         </h2>
         <div class="item__form">
-          <form class="form" action="#" method="POST" @submit.prevent="doPostProductToCart">
+          <form
+            class="form"
+            action="#"
+            method="POST"
+            @submit.prevent="doPostProductToCart"
+          >
             <div class="item__row item__row--center">
               <CounterInput v-model="quantityProducts" />
 
@@ -52,7 +57,11 @@
               <fieldset class="form__block">
                 <legend class="form__legend">Цвет</legend>
                 <ul class="colors colors--black">
-                  <li class="colors__item" v-for="color of product.colors" :key="color.id">
+                  <li
+                    class="colors__item"
+                    v-for="color of product.colors"
+                    :key="color.id"
+                  >
                     <label class="colors__label">
                       <input
                         class="colors__radio sr-only"
@@ -61,7 +70,10 @@
                         :value="color.color.id"
                         v-model="selectedColorId"
                       />
-                      <span class="colors__value" :style="{ backgroundColor: color.color.code }">
+                      <span
+                        class="colors__value"
+                        :style="{ backgroundColor: color.color.code }"
+                      >
                       </span>
                     </label>
                   </li>
@@ -70,9 +82,19 @@
 
               <fieldset class="form__block">
                 <legend class="form__legend">Размер</legend>
-                <label class="form__label form__label--small form__label--select">
-                  <select class="form__select" name="size" v-model="selectedSizeId">
-                    <option v-for="size of product.sizes" :key="size.id" :value="size.id">
+                <label
+                  class="form__label form__label--small form__label--select"
+                >
+                  <select
+                    class="form__select"
+                    name="size"
+                    v-model="selectedSizeId"
+                  >
+                    <option
+                      v-for="size of product.sizes"
+                      :key="size.id"
+                      :value="size.id"
+                    >
                       {{ size.title }}
                     </option>
                   </select>
@@ -88,7 +110,10 @@
       <AboutProductTabs />
 
       <router-link :to="{ name: 'cart' }" title="Перейти в корзину">
-        <NotifyMessage :isVisible="successfulRequestNotify" text="Товар добавлен в корзину" />
+        <NotifyMessage
+          :isVisible="successfulRequestNotify"
+          text="Товар добавлен в корзину"
+        />
       </router-link>
 
       <NotifyMessage
@@ -100,23 +125,23 @@
 </template>
 
 <script>
-import { ref, computed, watch } from "vue";
-import { useRoute } from "vue-router";
-import { useStore } from "vuex";
-import AboutProductTabs from "@/components/AboutProductTabs.vue";
-import useChangeImage from "@/composables/useChangeImage";
-import NotifyMessage from "@/components/NotifyMessage.vue";
-import BreadCrumbs from "@/components/BreadCrumbs.vue";
-import CounterInput from "@/components/CounterInput.vue";
-import LoaderElement from "@/components/LoaderElement.vue";
-import ErrorNotify from "@/components/ErrorNotify.vue";
-import BaseButton from "@/components/BaseButton.vue";
-import useAddProductToCart from "@/composables/useAddProductToCart";
-import useLoadProduct from "@/composables/useLoadProduct";
-import useStatusLoading from "@/composables/useStatusLoading";
+import { ref, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+import AboutProductTabs from '@/components/AboutProductTabs.vue';
+import useChangeImage from '@/composables/useChangeImage';
+import NotifyMessage from '@/components/NotifyMessage.vue';
+import BreadCrumbs from '@/components/BreadCrumbs.vue';
+import CounterInput from '@/components/CounterInput.vue';
+import LoaderElement from '@/components/LoaderElement.vue';
+import ErrorNotify from '@/components/ErrorNotify.vue';
+import BaseButton from '@/components/BaseButton.vue';
+import useAddProductToCart from '@/composables/useAddProductToCart';
+import useLoadProduct from '@/composables/useLoadProduct';
+import useStatusLoading from '@/composables/useStatusLoading';
 
 export default {
-  name: "ProductPage",
+  name: 'ProductPage',
 };
 </script>
 
@@ -128,16 +153,18 @@ const { fetchProduct, isLoading, isError } = useLoadProduct();
 fetchProduct();
 
 const { postProductToCart } = useAddProductToCart();
-const product = computed(() => $store.getters["products/product"]);
+const product = computed(() => $store.getters['products/product']);
 const quantityProducts = ref(1);
-const selectedColorId = ref("");
-const selectedSizeId = ref("");
+const selectedColorId = ref('');
+const selectedSizeId = ref('');
 const doPostProductToCart = () =>
   postProductToCart({
     productId: product.value.id,
     colorId: selectedColorId.value,
     sizeId: selectedSizeId.value,
     quantity: quantityProducts.value,
+  }).then(() => {
+    quantityProducts.value = 1;
   });
 
 const doSetDefaultSize = () => {
@@ -159,24 +186,34 @@ const category = computed(() => {
   if (product.value?.category?.title) {
     return product.value.category.title;
   }
-  return "Категория";
+  return 'Категория';
 });
 
 const title = computed(() => {
   if (product.value?.title) {
     return product.value.title;
   }
-  return "Название товара";
+  return 'Название товара';
 });
 
-const { isLoad, isNextLoad, isLoadError, doSetLoaded, doSetLoadError, doSetStartLoading } =
-  useStatusLoading();
+const {
+  isLoad,
+  isNextLoad,
+  isLoadError,
+  doSetLoaded,
+  doSetLoadError,
+  doSetStartLoading,
+} = useStatusLoading();
 doSetStartLoading();
 
-const successfulRequestNotify = computed(() => $store.getters["notify/successfulRequestNotify"]);
-const errorRequestNotify = computed(() => $store.getters["notify/errorRequestNotify"]);
+const successfulRequestNotify = computed(
+  () => $store.getters['notify/successfulRequestNotify']
+);
+const errorRequestNotify = computed(
+  () => $store.getters['notify/errorRequestNotify']
+);
 
-$store.commit("notify/clearTimerNotify");
+$store.commit('notify/clearTimerNotify');
 
 watch(product, () => {
   doSetDefaultColor();

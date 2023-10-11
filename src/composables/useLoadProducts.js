@@ -11,7 +11,7 @@ export default () => {
     isLoading.value = true;
     isError.value = false;
 
-    $store
+    return $store
       .dispatch("products/loadProductsData")
       .then(() => {
         isLoading.value = false;

@@ -1,6 +1,11 @@
 <template>
   <aside class="filter">
-    <form class="filter__form form" action="#" method="get" @submit.prevent="filterProducts">
+    <form
+      class="filter__form form"
+      action="#"
+      method="get"
+      @submit.prevent="filterProducts"
+    >
       <fieldset class="form__block">
         <legend class="form__legend">Цена</legend>
         <label class="form__label form__label--price">
@@ -28,9 +33,17 @@
       <fieldset class="form__block">
         <legend class="form__legend">Категория</legend>
         <label class="form__label form__label--select">
-          <select class="form__select" name="category" v-model="filters.inputSelectCategory">
+          <select
+            class="form__select"
+            name="category"
+            v-model="filters.inputSelectCategory"
+          >
             <option :value="null">Все категории</option>
-            <option :value="category.id" v-for="category of categories" :key="category.id">
+            <option
+              :value="category.id"
+              v-for="category of categories"
+              :key="category.id"
+            >
               {{ category.title }}
             </option>
           </select>
@@ -50,7 +63,11 @@
                 :value="color.id"
                 v-model="filters.inputColors"
               />
-              <span class="colors__value" :style="{ backgroundColor: color.code }"> </span>
+              <span
+                class="colors__value"
+                :style="{ backgroundColor: color.code }"
+              >
+              </span>
             </label>
           </li>
         </ul>
@@ -59,7 +76,11 @@
       <fieldset class="form__block">
         <legend class="form__legend">Материал</legend>
         <ul class="check-list">
-          <li class="check-list__item" v-for="material of materials" :key="material.id">
+          <li
+            class="check-list__item"
+            v-for="material of materials"
+            :key="material.id"
+          >
             <label class="check-list__label">
               <input
                 class="check-list__check sr-only"
@@ -80,7 +101,11 @@
       <fieldset class="form__block">
         <legend class="form__legend">Коллекция</legend>
         <ul class="check-list">
-          <li class="check-list__item" v-for="season of seasons" :key="season.id">
+          <li
+            class="check-list__item"
+            v-for="season of seasons"
+            :key="season.id"
+          >
             <label class="check-list__label">
               <input
                 class="check-list__check sr-only"
@@ -113,23 +138,23 @@
 </template>
 
 <script>
-import { computed, onMounted } from "vue";
-import { useStore } from "vuex";
-import BaseButton from "@/components/BaseButton.vue";
+import { computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import BaseButton from '@/components/BaseButton.vue';
 
 export default {
-  name: "FilterForm",
+  name: 'FilterForm',
 };
 </script>
 
 <script setup>
 const $store = useStore();
 
-const filters = computed(() => $store.getters["filters/filters"]);
-const materials = computed(() => $store.getters["filters/materials"]);
-const seasons = computed(() => $store.getters["filters/seasons"]);
-const categories = computed(() => $store.getters["filters/categories"]);
-const colors = computed(() => $store.getters["filters/colors"]);
+const filters = computed(() => $store.getters['filters/filters']);
+const materials = computed(() => $store.getters['filters/materials']);
+const seasons = computed(() => $store.getters['filters/seasons']);
+const categories = computed(() => $store.getters['filters/categories']);
+const colors = computed(() => $store.getters['filters/colors']);
 
 const filterFieldsNotEmpty = computed(() =>
   Object.values(filters.value).some((filter) => {
@@ -137,17 +162,17 @@ const filterFieldsNotEmpty = computed(() =>
       return filter.length;
     }
     return filter;
-  }),
+  })
 );
 
-const getMaterials = () => $store.dispatch("filters/loadMaterialsData");
-const getSeasons = () => $store.dispatch("filters/loadSeasonsData");
-const getCategories = () => $store.dispatch("filters/loadCategoriesData");
-const getColors = () => $store.dispatch("filters/loadColorsData");
-const filterProducts = () => $store.dispatch("products/loadProductsData");
+const getMaterials = () => $store.dispatch('filters/loadMaterialsData');
+const getSeasons = () => $store.dispatch('filters/loadSeasonsData');
+const getCategories = () => $store.dispatch('filters/loadCategoriesData');
+const getColors = () => $store.dispatch('filters/loadColorsData');
+const filterProducts = () => $store.dispatch('products/loadProductsData');
 
 const resetFilter = () => {
-  $store.commit("filters/resetFilter");
+  $store.commit('filters/resetFilter');
   filterProducts();
 };
 
